@@ -1,0 +1,38 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "A blog app using Nodejs & MongoDB ",
+  "main": "app.js",
+  "scripts": {
+    "dev1": "npx ts-node app.js",
+    "dev": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NijeshB/blog.git"
+  },
+  "keywords": [
+    "Blog",
+    "NodeJs",
+    "MongoDB"
+  ],
+  "author": "NJ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NijeshB/blog/issues"
+  },
+  "homepage": "https://github.com/NijeshB/blog#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.7.5",
+    "nodemon": "^3.1.7",
+    "prettier": "3.3.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
