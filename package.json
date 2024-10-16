@@ -1,0 +1,28 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "description": "Blog App using Nodejs, Sequelize, MySQL",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon"
+  },
+  "keywords": [
+    "NodeJS",
+    "MySQL",
+    "Sequelize"
+  ],
+  "author": "NJ",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "sequelize": "^6.37.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "dotenv": "^16.4.5",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}
