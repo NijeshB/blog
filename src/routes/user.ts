@@ -1,10 +1,5 @@
 import express, { NextFunction, Request, Response, Router } from "express";
-import { User } from "@prisma/client";
-import { prismaClient } from "../app";
 import UserSignUpValidator from "../validation/user";
-import { BadException } from "../exceptions/bad-requests";
-import { StatusCode } from "../exceptions/httpException";
-import Joi from "joi";
 import { handler } from "../requestHandler";
 import { JoiBadException } from "../exceptions/JoiBadRequest";
 

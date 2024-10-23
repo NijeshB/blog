@@ -22,7 +22,6 @@ app.use("/users", userRouter);
 export const prismaClient = new PrismaClient({ log: ["query"] });
 app.listen(secrets.PORT, () => {
   logger.info(`App is running in port ${secrets.PORT}`);
-  console.log("ts");
 });
 
 app.use(errorHandler);
