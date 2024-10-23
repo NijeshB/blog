@@ -2,15 +2,17 @@ import express, { NextFunction, Request, Response, Router } from "express";
 import UserSignUpValidator from "../validation/user";
 import { handler } from "../requestHandler";
 import { JoiBadException } from "../exceptions/JoiBadRequest";
+import joiDefaultOptions from "../validation/joi-options";
 
 const userRouter: Router = express.Router();
 
 const UserSignUp = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userData = req.body;
-    const validate = await UserSignUpValidator.validate(userData, {
-      abortEarly: false,
-    });
+    const validate = await UserSignUpValidator.validate(
+      userData,
+      joiDefaultOptions,
+    );
 
     if (validate.error) {
       throw new JoiBadException("Bad Request!", validate);

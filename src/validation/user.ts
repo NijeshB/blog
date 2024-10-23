@@ -7,7 +7,7 @@ export interface IUserCreate {
 
 const UserSignUpValidator = Joi.object({
   name: Joi.string().required(),
-  email: Joi.string().email(),
+  email: Joi.string().email().required(),
 });
 
 export default UserSignUpValidator;

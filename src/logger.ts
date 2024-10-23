@@ -4,7 +4,6 @@ import { secrets } from "./secrets";
 const silentLog: Boolean = secrets.ENABLE_LOG
   ? secrets.ENABLE_LOG === "true"
   : true;
-console.log("log", silentLog);
 export const logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
