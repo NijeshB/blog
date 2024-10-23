@@ -1,9 +1,28 @@
-import { log } from "console";
 import express from "express";
-import { PORT } from "./secrets";
+import { secrets } from "./secrets";
+import cors from "cors";
+import compression from "compression";
+import userRouter from "./routes/user";
+import { PrismaClient } from "@prisma/client";
+import { errorHandler } from "./requestHandler";
+import { logger } from "./logger";
 
 const app = express();
+app.use(express.json());
 
-app.listen(PORT, () => {
-  log(`App is running in port ${PORT}`);
+app.use(
+  cors({
+    credentials: true,
+  }),
+);
+
+app.use(compression());
+app.use("/users", userRouter);
+
+export const prismaClient = new PrismaClient({ log: ["query"] });
+app.listen(secrets.PORT, () => {
+  logger.info(`App is running in port ${secrets.PORT}`);
+  console.log("ts");
 });
+
+app.use(errorHandler);
