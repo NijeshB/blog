@@ -8,6 +8,8 @@ import { randomBytes } from "crypto";
 import bcrypt, { compareSync } from "bcrypt";
 import { omit } from "lodash";
 import { NotFoundException } from "../exceptions/notfoundException";
+import jwt from "jsonwebtoken";
+import { secrets } from "../secrets";
 
 function hashedRandomPassword(length: number): string {
   const pass = "test@123"; //randomBytes(length).toString("base64").slice(0, length);
@@ -72,7 +74,15 @@ export const getToken = async (req: Request, res: Response) => {
     );
   }
 
-  res.send("OK");
+  const token = jwt.sign(
+    {
+      userId: user.id,
+      name: user.name,
+    },
+    secrets.JWT_SECRET,
+  );
+
+  res.status(200).json({ status: "success", token });
 };
 
 export const deleteAllUser = async (req: Request, res: Response) => {
