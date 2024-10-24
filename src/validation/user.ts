@@ -1,8 +1,10 @@
 import Joi from "joi";
 
-export interface IUserCreate {
+export interface IUser {
+  id: number;
   name: string;
   email: string;
+  password: string;
 }
 
 const UserSignUpValidator = Joi.object({
@@ -11,3 +13,8 @@ const UserSignUpValidator = Joi.object({
 });
 
 export default UserSignUpValidator;
+
+export const TokenValidator = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().required(),
+});

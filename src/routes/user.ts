@@ -1,28 +1,16 @@
-import express, { NextFunction, Request, Response, Router } from "express";
-import UserSignUpValidator from "../validation/user";
+import express, { Router } from "express";
 import { handler } from "../requestHandler";
-import { JoiBadException } from "../exceptions/JoiBadRequest";
-import joiDefaultOptions from "../validation/joi-options";
+import {
+  UserSignUp,
+  deleteAllUser,
+  getToken,
+  getUserById,
+} from "../models/user";
 
 const userRouter: Router = express.Router();
 
-const UserSignUp = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const userData = req.body;
-    const validate = await UserSignUpValidator.validate(
-      userData,
-      joiDefaultOptions,
-    );
-
-    if (validate.error) {
-      throw new JoiBadException("Bad Request!", validate);
-    }
-    //const createUser = await prismaClient.user.create();
-    res.send("OK");
-  } catch (err) {
-    next(err);
-  }
-};
-
 userRouter.post("/signup", handler(UserSignUp));
+userRouter.get("/token", handler(getToken));
+userRouter.get("/:id", handler(getUserById));
+userRouter.delete("/all", handler(deleteAllUser));
 export default userRouter;

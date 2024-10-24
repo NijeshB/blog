@@ -1,5 +1,5 @@
 const joiDefaultOptions = {
   abortEarly: false,
-  allowUnknown: false,
+  allowUnknown: true,
 };
 export default joiDefaultOptions;
