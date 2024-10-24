@@ -1,17 +1,35 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["omitApi"]
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  email     String   @unique
+  name      String?
+  status    Status   @default(ACTIVE)
+  password  String
+  role      Role     @default(USER)
+  Blog      Blog?
+
+  @@map("users")
+}
+
+model Blog {
+  id        Int        @id @default(autoincrement())
+  content   String
+  userId    Int        @unique
+  createdAt DateTime   @default(now())
+  status    PostStatus @default(REVIEW)
+  user      User       @relation(fields: [userId], references: [id])
+
+  @@map("blog")
 }
 
 enum Status {
@@ -27,25 +45,7 @@ enum PostStatus {
   TRASH
 }
 
-model User{
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  email     String   @unique
-  name      String?
-  status    Status   @default(ACTIVE)
-  password String
-  @@map("users")
-  Blog Blog[]
-}
-
-model Blog{
-  id Int @id @default(autoincrement())
-  content String 
-  userId Int  @unique
-  createdAt DateTime @default(now())
-  status PostStatus @default(REVIEW)
-  user User @relation(fields: [userId], references: [id])
-  
-
-  @@map("blog")
+enum Role {
+  ADMIN
+  USER
 }
