@@ -1,11 +1,15 @@
 import express, { Router } from "express";
 import { handler } from "../requestHandler";
 import { CreatePost } from "../models/posts";
-import { auth } from "../middlewares/token";
+import { auth, publishPost, setAdmin } from "../middlewares/token";
 
 const postRouter: Router = express.Router();
 
-postRouter.post("/", handler(auth), handler(CreatePost));
+postRouter.post(
+  "/",
+  [handler(setAdmin), handler(auth), publishPost],
+  handler(CreatePost),
+);
 // postRouter.post(
 //   "/create",
 //   [handler(setAdmin), validateRole],

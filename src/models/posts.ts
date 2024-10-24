@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { joiCommonValidate, validateType } from "../validation/joi-validate";
 import slugify from "slugify";
 import { prismaClient } from "../app";
+import { omit } from "lodash";
 
 export const CreatePost = async (req: Request, res: Response) => {
   const postData = { ...req.body };
@@ -16,5 +17,10 @@ export const CreatePost = async (req: Request, res: Response) => {
       userId: req.userId,
     },
   });
-  res.send("OK");
+  const postResponse = omit(post, ["userId", "createdAt"]);
+  res.status(200).json({
+    status: "success",
+    message: "Post created successfully!",
+    data: { postResponse },
+  });
 };

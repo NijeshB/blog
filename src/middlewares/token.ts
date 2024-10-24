@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { verifyToken } from "../models/token";
-import { Role } from "@prisma/client";
+import { PostStatus, Role } from "@prisma/client";
 import { JwtPayload } from "jsonwebtoken";
 import { AuthException } from "../exceptions/authException";
 
@@ -45,8 +45,18 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
     });
   }
   if (authToken) {
-    console.log("Auth", authToken);
     req.userId = authToken.userId;
     next();
   }
+};
+
+export const publishPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (req.isAdmin) {
+    req.body.status = PostStatus.PUBLISHED;
+  }
+  next();
 };
