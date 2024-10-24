@@ -5,7 +5,6 @@ export enum validateType {
   SignUp,
   Token,
 }
-import { NextFunction } from "express";
 export const joiCommonValidate = async (
   validationType: validateType,
   data: object,

@@ -8,8 +8,10 @@ import { randomBytes } from "crypto";
 import bcrypt, { compareSync } from "bcrypt";
 import { omit } from "lodash";
 import { NotFoundException } from "../exceptions/notfoundException";
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
 import { secrets } from "../secrets";
+import { AuthException } from "../exceptions/authException";
+import { Role } from "@prisma/client";
 
 function hashedRandomPassword(length: number): string {
   const pass = "test@123"; //randomBytes(length).toString("base64").slice(0, length);
@@ -17,7 +19,7 @@ function hashedRandomPassword(length: number): string {
 }
 
 export const UserSignUp = async (req: Request, res: Response) => {
-  const userData = req.body;
+  const userData = { ...req.body };
   await joiCommonValidate(validateType.SignUp, userData);
 
   const userExists = await getUserByEmail(userData.email);
@@ -77,9 +79,13 @@ export const getToken = async (req: Request, res: Response) => {
   const token = jwt.sign(
     {
       userId: user.id,
-      name: user.name,
+      role: user.role,
     },
     secrets.JWT_SECRET,
+    {
+      algorithm: "HS256",
+      expiresIn: "1d",
+    },
   );
 
   res.status(200).json({ status: "success", token });
@@ -98,4 +104,12 @@ const getUserByEmail = async (email: string) => {
     },
   });
   return user;
+};
+
+export const verifyToken = async (token: string) => {
+  try {
+    return (await jwt.verify(token.trim(), secrets.JWT_SECRET)) as JwtPayload;
+  } catch (error: any) {
+    throw new AuthException("Token Error", error);
+  }
 };
