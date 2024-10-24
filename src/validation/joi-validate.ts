@@ -1,9 +1,10 @@
 import UserSignUpValidator, { TokenValidator } from "../validation/user";
-import joiDefaultOptions from "../validation/joi-options";
 import { JoiBadException } from "../exceptions/JoiBadRequest";
+import { PostValidator } from "./posts";
 export enum validateType {
   SignUp,
   Token,
+  Post,
 }
 export const joiCommonValidate = async (
   validationType: validateType,
@@ -18,6 +19,9 @@ export const joiCommonValidate = async (
     case 1:
       joiValidator = TokenValidator;
       break;
+    case 2:
+      joiValidator = PostValidator;
+      break;
   }
 
   if (joiValidator) {
@@ -29,3 +33,9 @@ export const joiCommonValidate = async (
 
   return true;
 };
+
+const joiDefaultOptions = {
+  abortEarly: false,
+  allowUnknown: true,
+};
+export default joiDefaultOptions;

@@ -6,7 +6,10 @@
   "scripts": {
     "dev1": "npx ts-node app.js",
     "dev": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "gp": "npx prisma generate",
+    "dp": "npx prisma db push",
+    "dpl": "npx prisma db pull"
   },
   "repository": {
     "type": "git",
@@ -33,6 +36,7 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
+    "slugify": "^1.6.6",
     "winston": "^3.15.0"
   },
   "devDependencies": {

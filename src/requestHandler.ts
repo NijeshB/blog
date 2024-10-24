@@ -18,11 +18,32 @@ export const handler = (method: Function) => {
       } else if (error instanceof JoiBadException) {
         exception = error;
       } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        exception = new BadException("Bad Requests", StatusCode.BAD_REQUEST, {
-          code: error.code,
-          message: error.message,
-          meta: error.meta,
-        });
+        if (error.code == "P2002") {
+          let meta = error.meta?.modelName;
+          let msg = "";
+          if (meta == "Post") {
+            msg = "Given post title is already exists!";
+          } else if (meta == "User") {
+            msg = "Given email id is already exists!";
+          } else {
+            msg = "Something went wrong!";
+          }
+          exception = new BadException(
+            "Bad Requests",
+            StatusCode.UNIQUE_CONSTRAINT_FAIL,
+            {
+              code: error.code,
+              message: msg,
+              //meta: error.meta,
+            },
+          );
+        } else {
+          exception = new InternalException(
+            "Internal Server Error",
+            StatusCode.INTERNAL_ERROR,
+            { error: "Something went wrong!" },
+          );
+        }
       } else {
         exception = new InternalException(
           "Internal Server Error",

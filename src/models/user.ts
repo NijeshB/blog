@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { joiCommonValidate, validateType } from "../validation/joi-validate";
 import { prismaClient } from "../app";
 import { logger } from "../logger";
@@ -8,10 +8,9 @@ import { randomBytes } from "crypto";
 import bcrypt, { compareSync } from "bcrypt";
 import { omit } from "lodash";
 import { NotFoundException } from "../exceptions/notfoundException";
-import jwt, { JsonWebTokenError, JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { secrets } from "../secrets";
-import { AuthException } from "../exceptions/authException";
-import { Role } from "@prisma/client";
+import { createToken } from "./token";
 
 function hashedRandomPassword(length: number): string {
   const pass = "test@123"; //randomBytes(length).toString("base64").slice(0, length);
@@ -75,18 +74,10 @@ export const getToken = async (req: Request, res: Response) => {
       {},
     );
   }
-
-  const token = jwt.sign(
-    {
-      userId: user.id,
-      role: user.role,
-    },
-    secrets.JWT_SECRET,
-    {
-      algorithm: "HS256",
-      expiresIn: "1d",
-    },
-  );
+  const token = await createToken({
+    userId: user.id,
+    role: user.role,
+  });
 
   res.status(200).json({ status: "success", token });
 };
@@ -98,18 +89,9 @@ export const deleteAllUser = async (req: Request, res: Response) => {
 };
 
 const getUserByEmail = async (email: string) => {
-  const user = await prismaClient.user.findFirst({
+  return await prismaClient.user.findFirst({
     where: {
       email,
     },
   });
-  return user;
-};
-
-export const verifyToken = async (token: string) => {
-  try {
-    return (await jwt.verify(token.trim(), secrets.JWT_SECRET)) as JwtPayload;
-  } catch (error: any) {
-    throw new AuthException("Token Error", error);
-  }
 };

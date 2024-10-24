@@ -6,6 +6,7 @@ import userRouter from "./routes/user";
 import { PrismaClient } from "@prisma/client";
 import { errorHandler } from "./requestHandler";
 import { logger } from "./logger";
+import postRouter from "./routes/posts";
 
 const app = express();
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(
 
 app.use(compression());
 app.use("/users", userRouter);
+app.use("/posts", postRouter);
 
 export const prismaClient = new PrismaClient({ log: ["query"] });
 app.listen(secrets.PORT, () => {

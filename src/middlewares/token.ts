@@ -1,18 +1,17 @@
 import { NextFunction, Request, Response } from "express";
-import { verifyToken } from "../models/user";
+import { verifyToken } from "../models/token";
 import { Role } from "@prisma/client";
+import { JwtPayload } from "jsonwebtoken";
+import { AuthException } from "../exceptions/authException";
 
 export const setAdmin = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  let authToken = getAuthToken(req);
-  if (authToken) {
-    const { role } = await verifyToken(authToken);
-    if (role == Role.ADMIN) {
-      req.isAdmin = true;
-    }
+  let token = await getAuthToken(req);
+  if (token && token.role == Role.ADMIN) {
+    req.isAdmin = true;
   }
 
   next();
@@ -28,10 +27,26 @@ export const validateRole = async (
   }
   next();
 };
-const getAuthToken = (req: Request) => {
+const getAuthToken = async (req: Request) => {
   let authToken = req.header("authorization") || "";
   if (authToken) {
     authToken = authToken.replace("Bearer", "");
+    return (await verifyToken(authToken)) as JwtPayload;
   }
-  return authToken;
+  return false;
+};
+
+export const auth = async (req: Request, res: Response, next: NextFunction) => {
+  const authToken = await getAuthToken(req);
+
+  if (!authToken) {
+    throw new AuthException("Unauthorized", {
+      error: "Token is missing or invalid!",
+    });
+  }
+  if (authToken) {
+    console.log("Auth", authToken);
+    req.userId = authToken.userId;
+    next();
+  }
 };

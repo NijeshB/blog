@@ -16,20 +16,27 @@ model User {
   status    Status   @default(ACTIVE)
   password  String
   role      Role     @default(USER)
-  Blog      Blog?
+  posts     Post[]
 
   @@map("users")
 }
 
-model Blog {
+model Post {
   id        Int        @id @default(autoincrement())
-  content   String
-  userId    Int        @unique
+  content   String     @db.Text
+  userId    Int
   createdAt DateTime   @default(now())
   status    PostStatus @default(REVIEW)
+  slug      String     @unique
+  title     String
   user      User       @relation(fields: [userId], references: [id])
 
-  @@map("blog")
+  @@map("posts")
+}
+
+model category {
+  id   Int    @id @default(autoincrement())
+  name String
 }
 
 enum Status {

@@ -11,6 +11,8 @@ declare global {
   namespace Express {
     export interface Request {
       isAdmin?: any; // You can also make it required by removing the '?'.
+      userId: Int;
+      author: Int;
     }
   }
 }

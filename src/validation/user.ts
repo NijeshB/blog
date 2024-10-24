@@ -1,12 +1,5 @@
 import Joi from "joi";
 
-export interface IUser {
-  id: number;
-  name: string;
-  email: string;
-  password: string;
-}
-
 const UserSignUpValidator = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
