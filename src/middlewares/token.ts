@@ -55,7 +55,7 @@ export const publishPost = async (
   res: Response,
   next: NextFunction,
 ) => {
-  if (req.isAdmin) {
+  if (req.isAdmin && !req.body.status) {
     req.body.status = PostStatus.PUBLISHED;
   }
   next();
