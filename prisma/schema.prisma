@@ -30,13 +30,24 @@ model Post {
   slug      String     @unique
   title     String
   user      User       @relation(fields: [userId], references: [id])
-
+  categories PostCategory[]
   @@map("posts")
 }
 
-model category {
+model Category {
   id   Int    @id @default(autoincrement())
-  name String
+  name String @unique
+  categories PostCategory[]
+
+  @@map("category")
+}
+
+model PostCategory {
+  postId Int 
+  categoryId Int
+  posts Post @relation(fields: [postId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+  @@id([postId, categoryId])
 }
 
 enum Status {

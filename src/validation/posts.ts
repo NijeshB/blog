@@ -9,4 +9,5 @@ export const PostValidator = Joi.object({
     .messages({
       "any.only": "Given `status` is invalid",
     }),
+  category: Joi.string().min(3),
 });

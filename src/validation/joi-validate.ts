@@ -1,10 +1,12 @@
 import UserSignUpValidator, { TokenValidator } from "../validation/user";
 import { JoiBadException } from "../exceptions/JoiBadRequest";
 import { PostValidator } from "./posts";
+import { CategoryValidator } from "./category";
 export enum validateType {
   SignUp,
   Token,
   Post,
+  Category,
 }
 export const joiCommonValidate = async (
   validationType: validateType,
@@ -21,6 +23,9 @@ export const joiCommonValidate = async (
       break;
     case 2:
       joiValidator = PostValidator;
+      break;
+    case 3:
+      joiValidator = CategoryValidator;
       break;
   }
 

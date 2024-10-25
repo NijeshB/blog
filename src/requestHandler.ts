@@ -12,7 +12,6 @@ export const handler = (method: Function) => {
       await method(req, res, next);
     } catch (error) {
       let exception: HttpException;
-      console.log("fe1", error);
       if (error instanceof HttpException) {
         exception = error;
       } else if (error instanceof JoiBadException) {
@@ -35,20 +34,24 @@ export const handler = (method: Function) => {
               code: error.code,
               message: msg,
               //meta: error.meta,
+              error,
             },
           );
         } else {
           exception = new InternalException(
             "Internal Server Error",
             StatusCode.INTERNAL_ERROR,
-            { error: "Something went wrong!" },
+            { error: "Something went wrong!!" },
           );
         }
       } else {
         exception = new InternalException(
           "Internal Server Error",
           StatusCode.INTERNAL_ERROR,
-          { error: "Something went wrong!" },
+          {
+            error: "Something went wrong!",
+            errorObj: error,
+          },
         );
       }
       next(exception);
