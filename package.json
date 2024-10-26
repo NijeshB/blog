@@ -4,6 +4,7 @@
   "description": "A blog app using Nodejs & MongoDB ",
   "main": "app.js",
   "scripts": {
+    "build": "tsc",
     "dev1": "npx ts-node app.js",
     "dev": "nodemon",
     "test": "echo \"Error: no test specified\" && exit 1",
