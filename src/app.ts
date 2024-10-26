@@ -29,3 +29,9 @@ app.listen(secrets.PORT, () => {
 });
 
 app.use(errorHandler);
+
+app.get("*", function (req, res) {
+  res
+    .status(404)
+    .json({ status: "error", message: "Given route is not found" });
+});

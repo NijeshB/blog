@@ -48,6 +48,8 @@ model PostCategory {
   posts Post @relation(fields: [postId], references: [id])
   category Category @relation(fields: [categoryId], references: [id])
   @@id([postId, categoryId])
+
+  @@map("postcategory")
 }
 
 enum Status {

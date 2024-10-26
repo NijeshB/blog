@@ -3,8 +3,23 @@ import { prismaClient } from "../app";
 import { joiCommonValidate, validateType } from "../validation/joi-validate";
 
 type categoryList = string | string[];
-export const getCategory = async (req: Request, res: Response) => {
-  await prismaClient.category.findMany({});
+export const getCategory = async (categoryList: string[]) => {
+  if (!categoryList.length) {
+    return [];
+  }
+
+  const category = await prismaClient.category.findMany({
+    where: {
+      name: {
+        in: categoryList,
+      },
+    },
+    select: {
+      id: true,
+    },
+  });
+  return category;
+  //return category.map((cat) => cat.id);
 };
 
 export const createCategory = async (req: Request, res: Response) => {
