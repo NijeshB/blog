@@ -5,6 +5,7 @@ import { BadException } from "./exceptions/bad-requests";
 import { InternalException } from "./exceptions/internalException";
 import { JoiBadException } from "./exceptions/JoiBadRequest";
 import { Prisma } from "@prisma/client";
+import { PrismaClientValidationError } from "@prisma/client/runtime/library";
 
 export const handler = (method: Function) => {
   return async (req: Request, res: Response, next: NextFunction) => {
@@ -44,6 +45,11 @@ export const handler = (method: Function) => {
             { error: "Something went wrong!!" },
           );
         }
+      } else if (error instanceof PrismaClientValidationError) {
+        exception = new BadException("Bad Requests", StatusCode.BAD_REQUEST, {
+          message: error.message,
+          error,
+        });
       } else {
         exception = new InternalException(
           "Internal Server Error",
